@@ -1,0 +1,66 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Sorties
+{% endblock title %}
+
+{% block activeES %}
+    active
+{% endblock activeES %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <a href="{% url 'addSortie' %}" class="btn"><i class="fas fa-plus-circle"></i> Nouvelle sortie</a>
+        <br><br>
+        <div class="table-container">
+            <div class="table-header">
+                <div class="search-container">
+                    <input type="text" id="searchInput" onkeyup="recherche()" class="search-input" placeholder="Rechercher une sorite...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            <table class="contacts-table" id="myTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Motif</th>
+                        <th>Prix Total</th>
+                        <th>Utilisateur</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if sorties.count == 0 %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 15px; font-style: italic; color: #666;">Aucune entrée trouvée</td>
+                        </tr>
+                    {% else %}
+                        {% for sortie in sorties %}
+                            
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ sortie.motif }}</td>
+                                <td><span class="prix">{{ sortie.prixTotal }} F</span></td>
+                                <td>{{ sortie.user.prenom }} {{ sortie.user.nom }}</td>
+                                <td>{{ sortie.date }}</td>
+                                <td class="actions">
+                                    <a href="{% url 'showProduitsSorties' sortie.id %}" class="action-btn view-btn" title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a data-url="{% url 'deleteSortie' sortie.id %}" data-message="cette sortie" class="action-btn delete-btn delete-confirme" title="Supprimer">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            <tr>
+
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+{% endblock principalContent %}

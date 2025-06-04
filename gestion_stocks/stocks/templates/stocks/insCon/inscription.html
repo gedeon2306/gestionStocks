@@ -1,0 +1,57 @@
+{% extends 'stocks/insCon/app.html' %}
+{% load static %}
+
+{% block title %}
+    G-Stocks - Inscription
+{% endblock title %}
+
+{% block formInsConn %}
+    <div class="form-container">
+        <h1>Créez votre compte</h1>
+        <form method="post" id="signup-form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="input-group">
+                    {{ form_inscription.prenom }}
+                    <label for="firstname">Prénom</label>
+                </div>
+                <div class="input-group">
+                    {{ form_inscription.nom }}
+                    <label for="lastname">Nom</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    {{ form_inscription.email }}
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-group">
+                    {{ form_inscription.telephone }}
+                    <label for="telephone">Téléphone</label>
+                </div>
+            </div>
+            <div class="input-group">
+                {{ form_inscription.username }}
+                <label for="username">Nom d'utilisateur</label>
+            </div>
+            <div class="input-group">
+                {{ form_inscription.password }}
+                <label for="password">Mot de passe</label>
+            </div>
+            <div class="input-group">
+                {{ form_inscription.confirm_password }}
+                <label for="confirm-password">Confirmer le mot de passe</label>
+            </div>
+            <button type="submit" name="register" id="submit-btn">S'inscrire</button>
+        </form>
+        <div class="social-login">
+            <p>Ou inscrivez-vous avec</p>
+            <div class="social-icons">
+                <div class="social-icon">f</div>
+                <div class="social-icon">G</div>
+                <div class="social-icon">in</div>
+            </div>
+        </div>
+    </div>
+{% endblock formInsConn %}
+            

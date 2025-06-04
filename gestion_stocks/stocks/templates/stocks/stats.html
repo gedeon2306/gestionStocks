@@ -1,0 +1,300 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Statistiques
+{% endblock title %}
+
+{% block activeDashboard %}
+    active
+{% endblock activeDashboard %}
+
+{% block principalContent %}
+
+    <main style="margin: 20px;">
+        <h1 style="margin-top: 100px; margin-bottom: 40px;">Utilisateur</h1>
+        <div class="chart-grid-container">
+            <div class="chart-container">
+                <canvas id="myChart1"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="myChart2"></canvas>
+            </div>
+        </div>
+        <h1 style="margin-top: 100px; margin-bottom: 40px;">Entrées</h1>
+        <div class="chart-grid-container">
+            <div class="chart-container">
+                <canvas id="monthlyEntryChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="monthlyPriceChart"></canvas>
+            </div>
+        </div>
+        <h1 style="margin-top: 100px; margin-bottom: 40px;">Sorties</h1>
+        <div class="chart-grid-container">
+            <div class="chart-container">
+                <canvas id="monthlySortieChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="monthlyPriceSortieChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="destruction"></canvas>
+            </div>
+        </div>
+    </main>
+    <footer class="footer" id="footer">
+        <div class="container">
+            <p>&copy; 2025 G-Stocks - Tous droits réservés</p>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+{% endblock principalContent %}
+
+{% block script %}
+<script>
+    Chart.register(ChartDataLabels); // Enregistrement du plugin
+
+    // Fonction pour créer les graphiques
+    function createChart(canvasId, data) {
+        const total = data.reduce((acc, val) => acc + val, 0);
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Administrateurs', 'Gestionnaires', 'Consultants'],
+                datasets: [{
+                    data: data,
+                    backgroundColor: ['blue', 'red', 'purple']
+                }]
+            },
+            options: {
+                plugins: {
+                    datalabels: {
+                        color: 'white',
+                        font: {
+                            weight: 'bold'
+                        },
+                        formatter: (value) => {
+                            // return ((value / total) * 100).toFixed(0) + '%'; // Affiche uniquement le pourcentage
+                            return (value);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function createChart2(canvasId, data) {
+        const total = data.reduce((acc, val) => acc + val, 0);
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Actif', 'Non Actif'],
+                datasets: [{
+                    data: data,
+                    backgroundColor: ['green', 'pink']
+                }]
+            },
+            options: {
+                plugins: {
+                    datalabels: {
+                        color: 'white',
+                        font: {
+                            weight: 'bold'
+                        },
+                        formatter: (value) => {
+                            return (value); // Affiche uniquement le pourcentage
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const admin = {{admin}}
+    const gest = {{gest}}
+    const consu = {{consu}}
+    const actif = {{actif}}
+    const noActif = {{noActif}}
+
+    // Création des 3 graphiques
+    createChart('myChart1', [admin, gest, consu]);
+    createChart2('myChart2', [actif, noActif]);
+
+    // Graphique du nombre d'entrées
+    const mois = {{ months_entry|safe }}
+    const datas = {{ entry_counts }}
+    const ctx = document.getElementById('monthlyEntryChart').getContext('2d');
+    const monthlyEntryChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: mois,
+            datasets: [{
+                label: 'Nombre d\'entrées par mois',
+                data: datas,
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Nombre d\'entrées'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois'
+                    }
+                }
+            }
+        }
+    });
+
+    const moisSortie = {{ months_sortie|safe }}
+    const datasSortie = {{ sortie_counts }}
+    const ctxSortie = document.getElementById('monthlySortieChart').getContext('2d');
+    const monthlySortieChart = new Chart(ctxSortie, {
+        type: 'bar',
+        data: {
+            labels: moisSortie,
+            datasets: [{
+                label: 'Nombre de sorties par mois',
+                data: datasSortie,
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Nombre de sorties'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois'
+                    }
+                }
+            }
+        }
+    });
+
+    // Graphique du prix total
+    const prix = {{ prices_entry }}
+    const ctxPrice = document.getElementById('monthlyPriceChart').getContext('2d');
+    const monthlyPriceChart = new Chart(ctxPrice, {
+        type: 'bar',
+        data: {
+            labels: mois,
+            datasets: [{
+                label: 'Prix total des entrées',
+                data: prix,
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Prix total'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois'
+                    }
+                }
+            }
+        }
+    });
+
+    const prixSortie = {{ prices_sortie }}
+    const ctxPriceSortie = document.getElementById('monthlyPriceSortieChart').getContext('2d');
+    const monthlyPriceSortieChart = new Chart(ctxPriceSortie, {
+        type: 'bar',
+        data: {
+            labels: moisSortie,
+            datasets: [{
+                label: 'Prix total des entrées',
+                data: prixSortie,
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Prix total'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois'
+                    }
+                }
+            }
+        }
+    });
+
+    const moisDestruction = {{ months_destruction|safe }}
+    const prixDestruction = {{ prices_destruction }}
+    const ctxPriceDestruction = document.getElementById('destruction').getContext('2d');
+    const destructionPrix = new Chart(ctxPriceDestruction, {
+        type: 'bar',
+        data: {
+            labels: moisDestruction,
+            datasets: [{
+                label: 'Prix total des destructions',
+                data: prixDestruction,
+                backgroundColor: 'red',
+                borderColor: 'yellow',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Prix total'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois'
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock script %}

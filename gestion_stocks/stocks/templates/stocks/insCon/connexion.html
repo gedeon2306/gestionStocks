@@ -1,0 +1,33 @@
+{% extends 'stocks/insCon/app.html' %}
+{% load static %}
+
+{% block title %}
+    G-Stocks - Connexion
+{% endblock title %}
+
+{% block formInsConn %}
+    <div class="form-container form-connexion">
+        <h1>Connexion</h1>
+        <form method="post" id="signup-form">
+            {% csrf_token %}
+            <div class="input-group">
+                {{ form_connexion.username }}
+                <label for="username">Nom d'utilisateur</label>
+            </div>
+            <div class="input-group">
+                {{ form_connexion.password }}
+                <label for="password">Mot de passe</label>
+            </div>
+            <button type="submit" name="login" id="submit-btn">Se connecter</button>
+        </form>
+        <div class="social-login">
+            <p>Ou inscrivez-vous avec</p>
+            <div class="social-icons">
+                <div class="social-icon">f</div>
+                <div class="social-icon">G</div>
+                <div class="social-icon">in</div>
+            </div>
+        </div>
+    </div>
+{% endblock formInsConn %}
+            

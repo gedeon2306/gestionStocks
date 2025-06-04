@@ -1,0 +1,84 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Produits sorties
+{% endblock title %}
+
+{% block activeES %}
+    active
+{% endblock activeES %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <div class="contact-card">
+            <div class="contact-header">
+                <img src="{% static 'stocks/images/favicons/favicon.png' %}" alt="Image" class="contact-img">
+                <h2 class="contact-name">{{ sortie.motif }}</h2>
+                <br><br>
+                <p>Date sortie : {{ sortie.date }}</p>
+                <br>
+                <p>Total : <span class="prix">{{ sortie.prixTotal }} F</span></p>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" onkeyup="recherche()" class="search-input" placeholder="Rechercher un produit...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                </div>
+                <table class="contacts-table" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Réference</th>
+                            <th>Qte</th>
+                            <th>Prix vente</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if produits.count == 0 %}
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 15px; font-style: italic; color: #666;">Aucun poduit</td>
+                            </tr>
+                        {% else %}
+                            {% for produit in produits %}
+                                
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ produit.nom }}</td>
+                                    <td>{{ produit.reference }}</td>
+                                    <td>{{ produit.quantite_sortie }}</td>
+                                    <td><span class="prix">{{ produit.prix_vente }} F</span></td>
+                                    <td><span class="prix">{{ produit.prixTotal }} F</span></td>
+                                </tr>
+    
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+    
+            </div>
+            <div class="contact-actions">
+                <a href="{% url 'listeSorties' %}" class="action-btn cancel-btn" title="Retour">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" id="footer">
+        <div class="container">
+            <p>&copy; 2025 G-Stocks - Tous droits réservés</p>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+{% endblock principalContent %}

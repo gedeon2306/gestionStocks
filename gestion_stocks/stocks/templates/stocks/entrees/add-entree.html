@@ -1,0 +1,113 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Effectuer une entrée
+{% endblock title %}
+
+{% block activeES %}
+    active
+{% endblock activeES %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <div class="add-contact-container">
+            <div class="form-container2">
+                <h2>Ajouter des Produits</h2>
+            </div>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            <div class="form-group">
+                <label for="fournisseur">Fournisseur :</label>
+                {{ form_addEntree.fournisseur }}
+            </div>
+            <div class="table-container">
+                <table class="contacts-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Référence</th>
+                            <th>Catégorie</th>
+                            <th>Quantité</th>
+                            <th>Unité</th>
+                            <th>Prix Achat</th>
+                            <th>Prix Vente</th>
+                            <th>Date Péremption</th>
+                        </tr>
+                    </thead>
+                    <tbody id="formset">
+                        {% for form in formset %}
+                            <tr>
+                                <td class="row-number">{{ forloop.counter }}</td>
+                                <td>{{ form.nom }}</td>
+                                <td>{{ form.reference }}</td>
+                                <td>{{ form.categorie }}</td>
+                                <td>{{ form.quantite_fournie }}</td>
+                                <td>{{ form.unite_mesure }}</td>
+                                <td>{{ form.prix_achat_unitaire }}</td>
+                                <td>{{ form.prix_vente }}</td>
+                                <td>{{ form.date_peremption }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-actions">
+                <a href="{% url 'listeEntrees' %}" class="cancel-btn">
+                    <i class="fas fa-times"></i>
+                    Annuler
+                </a>
+                <button type="button" onclick="addForm()" class="add">Ajouter un produit</button>
+                <button type="button" onclick="removeForm()" class="sup">Supprimer le dernier produit</button>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i>
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+    </main>
+
+{% endblock principalContent %}
+
+{% block script %}
+<script>
+    function updateRowNumbers() {
+        let rows = document.querySelectorAll("#formset tr");
+        rows.forEach((row, index) => {
+            let numCell = row.querySelector(".row-number");
+            if (numCell) numCell.textContent = index + 1; // Met à jour le numéro de ligne
+        });
+    }
+
+    function addForm() {
+        let formset = document.getElementById("formset");
+        let totalForms = document.getElementById("id_form-TOTAL_FORMS");
+        let formIndex = Number(totalForms.value);
+
+        let newForm = formset.lastElementChild.cloneNode(true);
+        newForm.innerHTML = newForm.innerHTML.replace(/form-(\d+)/g, `form-${formIndex}`);
+
+        formset.appendChild(newForm);
+        totalForms.value = formIndex + 1;
+
+        updateRowNumbers(); // Mettre à jour les numéros de ligne
+    }
+
+    function removeForm() {
+        let formset = document.getElementById("formset");
+        let totalForms = document.getElementById("id_form-TOTAL_FORMS");
+
+        if (formset.children.length > 1) {  // Garde au moins un formulaire
+            formset.removeChild(formset.lastElementChild);
+            totalForms.value = Number(totalForms.value) - 1;
+        }
+
+        updateRowNumbers(); // Mettre à jour les numéros de ligne
+    }
+</script>
+{% endblock script %}

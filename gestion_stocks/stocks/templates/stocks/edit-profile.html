@@ -1,0 +1,111 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Modifier le profile
+{% endblock title %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <div class="edit-profile-container">
+            <div class="profile-card">
+                <form method="post" id="edit-profile-form" class="profile-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="profile-header">
+                        <div class="profile-img-container">
+                            <img src="{% if user.photo_profil %}{{ user.photo_profil.url }}{% else %}{% static 'stocks/images/avatar-placeholder.svg' %}{% endif %}" alt="Photo de profil" class="profile-img-large">
+                            <button type="button" class="change-photo-btn">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                            {{ form_updateProfile.photo_profil }}
+                        </div>
+                        <h2>Modifier le profil</h2>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prenom">Prénom</label>
+                            {{ form_updateProfile.prenom }}
+                        </div>
+                        <div class="form-group">
+                            <label for="nom">Nom</label>
+                            {{ form_updateProfile.nom }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        {{ form_updateProfile.email }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telephone">Nom d'utilisateur</label>
+                        {{ form_updateProfile.telephone }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Nom d'utilisateur</label>
+                        {{ form_updateProfile.username }}
+                    </div>
+
+                    <div class="password-section">
+                        <h3>Modifier le mot de passe</h3>
+                        <div class="form-group">
+                            <label for="current-password">Mot de passe actuel</label>
+                            <div class="password-input">
+                                {{ form_updateProfile.current_password }}
+                                <button type="button" class="toggle-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="new-password">Nouveau mot de passe</label>
+                                <div class="password-input">
+                                    {{ form_updateProfile.new_password }}
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">Confirmer le mot de passe</label>
+                                <div class="password-input">
+                                    {{ form_updateProfile.confirm_password }}
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="{% url 'dashboard' %}" class="cancel-btn">
+                            <i class="fas fa-times"></i>
+                            Annuler
+                        </a>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-save"></i>
+                            Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" id="footer">
+        <div class="container">
+            <p>&copy; 2025 G-Stocks - Tous droits réservés</p>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+{% endblock principalContent %}

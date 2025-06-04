@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="shortcut icon" href="{% static 'stocks/images/favicons/favicon2.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'stocks/css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'stocks/notyf/notyf.min.css' %}">
+    <script src="{% static 'stocks/notyf/notyf.min.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <div class="circles">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+            <div class="illustration"></div>
+        </div>
+        {% block formInsConn %}
+                
+        {% endblock formInsConn %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Animation des cercles dans l'illustration
+            const circles = document.querySelectorAll('.circle');
+            circles.forEach(circle => {
+                setInterval(() => {
+                    const randomX = Math.random() * 20 - 10;
+                    const randomY = Math.random() * 20 - 10;
+                    circle.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                }, 1000);
+            });
+        });
+
+        // Initialisation de Notyf
+        const notyf = new Notyf({
+            duration: 5000,
+            position: {
+                x: 'right',
+                y: 'top',
+            },
+            types: [
+                {
+                    type: 'error',
+                    background: '#FF0000'
+                },
+                {
+                    type: 'success',
+                    background: '#32CD32'
+                }
+            ]
+        });
+
+        // Gestion des messages
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    notyf.error("{{ message }}");
+                {% else %}
+                    notyf.success("{{ message }}");
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        // Gestion des erreurs de formulaire
+        {% if form_inscription.errors %}
+            {% for field in form_inscription %}
+                {% for error in field.errors %}
+                    notyf.error("{{ error }}");
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+
+    </script>
+</body>
+</html>

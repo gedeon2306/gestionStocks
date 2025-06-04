@@ -1,0 +1,82 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Détails de l'utilisateur
+{% endblock title %}
+
+{% block activeUtilisateur %}
+    active
+{% endblock activeUtilisateur %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <div class="contact-details-container">
+            <div class="contact-card">
+                <div class="contact-header">
+                    <img src="{% if user.photo_profil %}{{ user.photo_profil.url }}{% else %}{% static 'stocks/images/avatar-placeholder.svg' %}{% endif %}" alt="Photo du contact" class="contact-img">
+                    <h2 class="contact-name">{{utilisateur.prenom}} {{utilisateur.nom}} {% if utilisateur.actif == True %}<i class="fas fa-check-circle" style="color: #009b00;"></i>{% else %}<i class="fas fa-xmark-circle" style="color: #b80000;"></i>{% endif %}</h2>
+                    <span class="contact-category">{{utilisateur.role}}</span>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="info-group">
+                        <label><i class="fas fa-phone"></i> Téléphone</label>
+                        <p>{{utilisateur.telephone}}</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas">@</i> Email</label>
+                        <p>{{utilisateur.email}}</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-user"></i> Nom d'utilisateur</label>
+                        <p>{{utilisateur.username}}</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-clock"></i> Date d'ajout</label>
+                        <p>{{ utilisateur.created_at|date:"d M Y" }}</p>
+                    </div>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="{% url 'updateUser' utilisateur.id %}" class="action-btn edit-btn" title="Modifier">
+                        <i class="fas fa-edit"></i>
+                        Modifier
+                    </a>
+                    <a data-url="{% url 'deleteUser' utilisateur.id %}" data-message="cet utilisateur" class="action-btn delete-btn delete-confirme" title="Supprimer">
+                        <i class="fas fa-trash-alt"></i>
+                        Supprimer
+                    </a>
+                    {% if utilisateur.actif == True %}
+                        <a href="{% url 'actif' id=utilisateur.id action='desactiver' %}" class="action-btn desactive-btn" title="Supprimer">
+                            <i class="fas fa-xmark-circle"></i>
+                            Désactiver
+                        </a>
+                    {% else %}
+                        <a href="{% url 'actif' id=utilisateur.id action='activer' %}" class="action-btn active-btn" title="Supprimer">
+                            <i class="fas fa-xmark-circle"></i>
+                            Activer
+                        </a>
+                    {% endif %}
+                    
+                    <a href="{% url 'listeUtilisateurs' %}" class="action-btn cancel-btn" title="Retour">
+                        <i class="fas fa-arrow-left"></i>
+                        Retour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" id="footer">
+        <div class="container">
+            <p>&copy; 2025 G-Stocks - Tous droits réservés</p>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+{% endblock principalContent %}

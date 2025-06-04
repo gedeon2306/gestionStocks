@@ -1,0 +1,67 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Fournisseurs
+{% endblock title %}
+
+{% block activeFournisseur %}
+    active
+{% endblock activeFournisseur %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <a href="{% url 'addFournisseur' %}" class="btn"><i class="fas fa-plus-circle"></i> Ajouter un fournisseur</a>
+        <br><br>
+        <div class="table-container">
+            <div class="table-header">
+                <div class="search-container">
+                    <input type="text" id="searchInput" onkeyup="recherche()" class="search-input" placeholder="Rechercher un fournisseur...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            <table class="contacts-table" id="myTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Téléphone</th>
+                        <th>Adresse</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if fournisseurs.count == 0 %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 15px; font-style: italic; color: #666;">Aucun fournisseur trouvé</td>
+                        </tr>
+                    {% else %}
+                        {% for fournisseur in fournisseurs %}
+                            
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{fournisseur.nom}}</td>
+                                <td>{{fournisseur.contact}}</td>
+                                <td>{{fournisseur.adresse}}</td>
+                                <td class="actions">
+                                    <a href="{% url 'showFournisseur' fournisseur.id %}" class="action-btn view-btn" title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'updateFournisseur' fournisseur.id %}" class="action-btn edit-btn" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a data-url="{% url 'deleteFournisseur' fournisseur.id %}" data-message="ce fournisseur" class="action-btn delete-btn delete-confirme" title="Supprimer">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            <tr>
+
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+{% endblock principalContent %}

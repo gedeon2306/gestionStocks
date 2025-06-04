@@ -1,0 +1,72 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Produits
+{% endblock title %}
+
+{% block activeProduit %}
+    active
+{% endblock activeProduit %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <a href="{% url 'addEntree' %}" class="btn"><i class="fas fa-plus-circle"></i> Ajouter un produits</a>
+        <br><br>
+        <div class="table-container">
+            <div class="table-header">
+                <div class="search-container">
+                    <input type="text" id="searchInput" onkeyup="recherche()" class="search-input" placeholder="Rechercher un produit...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            <table class="contacts-table" id="myTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Réference</th>
+                        <th>Catégorie</th>
+                        <th>Quantité disponible</th>
+                        <th>Date de péremption</th>
+                        <th>Fournisseur</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if produits.count == 0 %}
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 15px; font-style: italic; color: #666;">Aucun produit trouvé</td>
+                        </tr>
+                    {% else %}
+                        {% for produit in produits %}
+                            
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ produit.nom }}</td>
+                                <td>{{ produit.reference }}</td>
+                                <td>{{ produit.categorie }}</td>
+                                <td>{{ produit.quantite_disponible }}</td>
+                                <td>{{ produit.date_peremption }}</td>
+                                <td>{{ produit.entree.fournisseur.nom }}</td>
+                                <td class="actions">
+                                    <a href="{% url 'showProduit' produit.id %}" class="action-btn view-btn" title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'updateProduit' produit.id %}" class="action-btn edit-btn" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a data-url="{% url 'deleteProduit' produit.id %}" data-message="ce produit" class="action-btn delete-btn delete-confirme" title="Supprimer">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+{% endblock principalContent %}

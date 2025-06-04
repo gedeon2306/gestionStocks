@@ -1,0 +1,77 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Ajouter un utilisateur
+{% endblock title %}
+
+{% block activeUtilisateur %}
+    active
+{% endblock activeUtilisateur %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <div class="add-contact-container">
+            <div class="form-container">
+                <h2>Ajouter un utilisateur</h2>
+                <form method="post" id="add-contact-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="prenom">Prénom</label>
+                        {{form_addUser.prenom}}
+                    </div>
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        {{form_addUser.nom}}
+                    </div>
+                    <div class="form-group">
+                        <label for="telephone">Téléphone</label>
+                        {{form_addUser.telephone}}
+                    </div>
+                    <div class="form-group">
+                        <label for="reseau">Email</label>
+                        {{form_addUser.email}}
+                    </div>
+                    <div class="form-group">
+                        <label for="user">Nom d'utilisateur</label>
+                        {{form_addUser.username}}
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        {{form_addUser.password}}
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Confirmer le mot de passe</label>
+                        {{form_addUser.confirm_password}}
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Rôle</label>
+                        {{form_addUser.role}}
+                    </div>
+                    <div class="form-actions">
+                        <a href="{% url 'listeUtilisateurs' %}" class="cancel-btn">
+                            <i class="fas fa-times"></i>
+                            Annuler
+                        </a>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-plus"></i>
+                            Ajouter l'utilisateur
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" id="footer">
+        <div class="container">
+            <p>&copy; 2025 G-Stocks - Tous droits réservés</p>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+{% endblock principalContent %}

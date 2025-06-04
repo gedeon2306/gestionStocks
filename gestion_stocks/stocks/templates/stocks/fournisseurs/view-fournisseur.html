@@ -1,0 +1,94 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Détails produits fournis
+{% endblock title %}
+
+{% block activeFournisseur %}
+    active
+{% endblock activeFournisseur %}
+
+{% block principalContent %}
+    
+    <main class="main-content">
+        <div class="contact-details-container">
+            <div class="contact-card">
+                <div class="contact-header">
+                    <img src="{% static 'stocks/images/favicons/favicon.png' %}" alt="Image" class="contact-img">
+                    <h2 class="contact-name">{{fournisseur.nom}}</h2>
+                    <span class="contact-category">{{fournisseur.contact}}</span>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" onkeyup="recherche()" class="search-input" placeholder="Rechercher un produit...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                    </div>
+                    <table class="contacts-table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Produit</th>
+                                <th>Prix Unitaire</th>
+                                <th>Quantité</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if produits.count == 0 %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 15px; font-style: italic; color: #666;">Aucun poduit livré</td>
+                                </tr>
+                            {% else %}
+                                {% for produit in produits %}
+                                    
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ produit.nom }}</td>
+                                        <td><span class="prix">{{ produit.prix_achat_unitaire }} F</span></td>
+                                        <td>{{ produit.quantite_fournie }}</td>
+                                        <td>{{ produit.entree.date }}</td>
+                                        <td class="actions">
+                                            <a href="{% url 'showProduit' produit.id %}" class="action-btn view-btn" title="Voir">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{% url 'updateProduit' produit.id %}" class="action-btn edit-btn" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a data-url="{% url 'deleteProduit' produit.id %}" data-message="ce produit de la liste des produits du fournisseur" class="action-btn delete-btn delete-confirme" title="Supprimer">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="{% url 'listeFournisseurs' %}" class="action-btn cancel-btn" title="Retour">
+                        <i class="fas fa-arrow-left"></i>
+                        Retour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" id="footer">
+        <div class="container">
+            <p>&copy; 2025 G-Stocks - Tous droits réservés</p>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+{% endblock principalContent %}

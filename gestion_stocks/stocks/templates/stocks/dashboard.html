@@ -1,0 +1,69 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Dashboard
+{% endblock title %}
+
+{% block activeDashboard %}
+    active
+{% endblock activeDashboard %}
+
+{% block principalContent %}
+
+    <header class="hero" id="accueil">
+        <div class="container">
+            <h2>Bienvenue sur G-Stocks</h2>
+            <p>Gérer éfficacement votre stock de produits alimentaires</p>
+            <a href="#dashboard" class="btn">Voir le dashboard <i class="fas fa-angle-down"></i></a>
+        </div>
+    </header>
+
+    <main class="container-dashboard" id="dashboard">
+        <div class="dashboard-grid">
+            <div class="card">
+                <i class="fas fa-users"></i>
+                <h3>Utilisateurs</h3>
+                <p>{{ utilisateurs.count }}</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-box"></i>
+                <h3>Produits En Stocks</h3>
+                <p>{{ stock }}</p>
+            </div>
+            <a href="{% url 'stats' %}" style="text-decoration: none; color: #333;">
+                <div class="card">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Statistiques</h3>
+                    <p>. . .</p>
+                </div>
+            </a>
+            <div class="card">
+                <i class="fas fa-times"></i>
+                <h3>Produits Bientôt expirés</h3>
+                <p>66</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-dollar-sign"></i>
+                <h3>Achats</h3>
+                <p>{{achat}} F</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Ventes</h3>
+                <p>{{vente}} F</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" id="footer">
+        <div class="container">
+            <p>&copy; 2025 G-Stocks - Tous droits réservés</p>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+{% endblock principalContent %}

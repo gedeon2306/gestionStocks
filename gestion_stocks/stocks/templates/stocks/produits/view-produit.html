@@ -1,0 +1,79 @@
+{% extends 'stocks/app.html' %}
+{% load static %}
+
+{% block title %}
+    Détails du produits
+{% endblock title %}
+
+{% block activeProduit %}
+    active
+{% endblock activeProduit %}
+
+{% block principalContent %}
+
+    <main class="main-content">
+        <div class="contact-details-container">
+            <div class="contact-card">
+                <div class="contact-header">
+                    <img src="{% static 'stocks/images/detailsProduit.png' %}" alt="Image" class="contact-img">
+                    <h2 class="contact-name">{{ produit.nom }}</h2>
+                    <span class="contact-category">Catégorie : {{ produit.categorie }}</span>
+                    <span class="contact-category">Référence : {{ produit.reference }}</span>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="info-group">
+                        <label><i class="fas fa-save"></i> Quantité disponible</label>
+                        <p>{{ produit.quantite_disponible }}</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-chart-diagram"></i> Unité de mesure</label>
+                        <p>{{ produit.unite_mesure }}</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-dollar-sign"></i> Prix d’achat</label>
+                        <p>{{ produit.prix_achat_unitaire }} F</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-dollar-sign"></i> Prix de vente</label>
+                        <p>{{ produit.prix_vente }} F</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-clock"></i> Date de péremption</label>
+                        <p>{{ produit.date_peremption }}</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-box"></i> Fournisseur</label>
+                        <p>{{ produit.entree.fournisseur.nom }}</p>
+                    </div>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="{% url 'updateProduit' produit.id %}" class="action-btn edit-btn" title="Modifier">
+                        <i class="fas fa-edit"></i>
+                        Modifier
+                    </a>
+                    <a data-url="{% url 'deleteProduit' produit.id %}" data-message="ce produit" class="action-btn delete-btn delete-confirme" title="Supprimer">
+                        <i class="fas fa-trash-alt"></i>
+                        Supprimer
+                    </a>
+                    <a href="{% url 'listeProduits' %}" class="action-btn cancel-btn" title="Retour">
+                        <i class="fas fa-arrow-left"></i>
+                        Retour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" id="footer">
+        <div class="container">
+            <p>&copy; 2025 G-Stocks - Tous droits réservés</p>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+{% endblock principalContent %}
