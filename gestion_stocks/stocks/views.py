@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.timezone import localtime
 import os
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from django.db.models import Sum
 
 # Inscription et Connexion
@@ -95,12 +95,21 @@ def dashboard(request):
     for sortie in sorties:
         vente+=sortie.prixTotal
     
+    # Calculer les produits bientôt expirés (dans les 30 prochains jours)
+    aujourd_hui = date.today()
+    date_limite = aujourd_hui + timedelta(days=30)
+    produits_expires = Produit.objects.filter(
+        date_peremption__gte=aujourd_hui,
+        date_peremption__lte=date_limite
+    ).count()
+    
     context = {
         'user' : get_object_or_404(User, id=request.session["user_id"]),
         'utilisateurs' : User.objects.all(),
         'stock' : stock,
         'achat' : achat,
         'vente' : vente,
+        'produits_expires' : produits_expires,
     }
 
     return render(request, "stocks/dashboard.html", context)
